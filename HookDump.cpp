@@ -556,6 +556,8 @@ namespace zp
         printf("%s\n", buffer);
     }
 
+    //--------------------------------------------------------------------------------
+
     VOID CheckWOWStubHook(BOOL bVerbose)
     {
         struct ZP_TEB
@@ -589,7 +591,7 @@ namespace zp
                     ZydisDecodedInstruction instruction;
                     DWORD dwInstructionCount = 0;
 
-                    if (DisassembleInstructions((CONST BYTE*)pTeb->WOW32Reserved, 16, &instruction, 16, dwInstructionCount))
+                    if (DisassembleInstructions(*((CONST BYTE**)pTeb->WOW32Reserved), 16, &instruction, 16, dwInstructionCount))
                     {
                         //check for inter-segment branch
                         if (instruction.meta.branch_type != ZYDIS_BRANCH_TYPE_FAR)
