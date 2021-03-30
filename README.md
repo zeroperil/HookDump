@@ -17,9 +17,12 @@ NOTES:
 
 HOOK TYPES:
 
-GPA - GetProcAddress hook, this is output in verbose mode, when the result of GetProcAddress does not match the manually resolved function address.
-JMP - A jump instruction has been patched into the function to redirect execution flow
-EAT - The address in the export address table does not match the address in the export address table in the copy on disc
+- GPA  
+  - GetProcAddress hook, this is output in verbose mode, when the result of GetProcAddress does not match the manually resolved function address.
+- JMP  
+  - A jump instruction has been patched into the function to redirect execution flow
+- EAT 
+  - The address in the export address table does not match the address in the export address table in the copy on disc
 
 VERIFICATION:
 
