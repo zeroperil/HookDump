@@ -583,7 +583,7 @@ int main(int argc, char** argv)
 
         for (CONST ExportDataPair& p : dataMapWin)
         {
-            if (p.second->ResolvedProcAddress && p.second->ProcAddress)
+            if (bVerbose && p.second->ResolvedProcAddress && p.second->ProcAddress)
             {
                 if (p.second->ResolvedProcAddress != p.second->ProcAddress)
                 {
