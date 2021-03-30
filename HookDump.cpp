@@ -558,7 +558,7 @@ namespace zp
 
     //--------------------------------------------------------------------------------
 
-    VOID CheckWOWStubHook(BOOL bVerbose)
+    BOOL CheckWOWStubHook(BOOL bVerbose)
     {
         struct ZP_TEB
         {
@@ -596,8 +596,9 @@ namespace zp
                         //check for inter-segment branch
                         if (instruction.meta.branch_type != ZYDIS_BRANCH_TYPE_FAR)
                         {
-                            printf("\n[-] Possible hook of WOW64 system call stub\n");
+                            printf("\n[-] WOW64 system call stub [WOW]\n");
                             DumpInstruction(instruction, (UINT_PTR)pTeb->WOW32Reserved);
+                            return TRUE;
                         }
                     }
                 }
@@ -607,7 +608,9 @@ namespace zp
                         printf("[-] ERROR: CheckWOWStubHook exception trapped 0x%X\n", GetExceptionCode() );
                 }
             }
-    }
+        }
+
+        return FALSE;
     }
 
 }
@@ -701,11 +704,16 @@ int main(int argc, char** argv)
         }
     }
 
+#if defined(_M_IX86)
+    if (CheckWOWStubHook(bVerbose))
+    {
+        ++count;
+    }
+#endif
+
     printf("%d hooks found\n", count);
 
-#if defined(_M_IX86)
-    CheckWOWStubHook(bVerbose);
-#endif
+
 
 
     return 0;
