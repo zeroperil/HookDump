@@ -556,7 +556,57 @@ namespace zp
         printf("%s\n", buffer);
     }
 
-    
+    VOID CheckWOWStubHook(BOOL bVerbose)
+    {
+        struct ZP_TEB
+        {
+            NT_TIB NtTib;
+
+            PVOID EnvironmentPointer;
+            CLIENT_ID ClientId;
+            PVOID ActiveRpcHandle;
+            PVOID ThreadLocalStoragePointer;
+            PPEB ProcessEnvironmentBlock;
+
+            ULONG LastErrorValue;
+            ULONG CountOfOwnedCriticalSections;
+            PVOID CsrClientThread;
+            PVOID Win32ThreadInfo;
+            ULONG User32Reserved[26];
+            ULONG UserReserved[5];
+            PVOID WOW32Reserved;
+        };
+
+        ZP_TEB* pTeb = (ZP_TEB*)NtCurrentTeb();
+
+        if (pTeb)
+        {
+            if (pTeb->WOW32Reserved)
+            {
+                __try
+                {
+
+                    ZydisDecodedInstruction instruction;
+                    DWORD dwInstructionCount = 0;
+
+                    if (DisassembleInstructions((CONST BYTE*)pTeb->WOW32Reserved, 16, &instruction, 16, dwInstructionCount))
+                    {
+                        //check for inter-segment branch
+                        if (instruction.meta.branch_type != ZYDIS_BRANCH_TYPE_FAR)
+                        {
+                            printf("\n[-] Possible hook of WOW64 system call stub\n");
+                            DumpInstruction(instruction, (UINT_PTR)pTeb->WOW32Reserved);
+                        }
+                    }
+                }
+                __except(EXCEPTION_EXECUTE_HANDLER)
+                {
+                    if (bVerbose)
+                        printf("[-] ERROR: CheckWOWStubHook exception trapped 0x%X\n", GetExceptionCode() );
+                }
+            }
+    }
+    }
 
 }
 
@@ -650,6 +700,11 @@ int main(int argc, char** argv)
     }
 
     printf("%d hooks found\n", count);
+
+#if defined(_M_IX86)
+    CheckWOWStubHook(bVerbose);
+#endif
+
 
     return 0;
 }
