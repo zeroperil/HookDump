@@ -1,3 +1,6 @@
+Build-Win-x64/*
+Build-Win-x86/*
+
 # Prerequisites
 *.d
 
