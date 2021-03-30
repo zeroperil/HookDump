@@ -13,7 +13,7 @@ Please refer to the Zeroperil blog post for more information [https://zeroperil.
 
 ## Notes
 
-- Some EDRs replace the WOW stub in the PEB in order to hook system calls for 32 bit binaries.  In this case you may see zero hooks since no jump instructions are present in NTDLL.  Most likley you will see hooks in the x64 version as the syscall instruction is used for system calls instead of a WOW stub
+- Some EDRs replace the WOW stub in the TEB structure (specifically Wow32Reserved) in order to hook system calls for 32 bit binaries.  In this case you may see zero hooks since no jump instructions are present in NTDLL.  Most likley you will see hooks in the x64 version as the syscall instruction is used for system calls instead of a WOW stub
 - We have noted that Windows Defender does not use any user mode hooks
 - This tool is designed to be run as a standard user, elevation is not required
 
