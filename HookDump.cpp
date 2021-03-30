@@ -596,7 +596,7 @@ namespace zp
                         //check for inter-segment branch
                         if (instruction.meta.branch_type != ZYDIS_BRANCH_TYPE_FAR)
                         {
-                            printf("\n[-] WOW64 system call stub [WOW]\n");
+                            printf("[-] WOW64 system call stub [WOW]\n");
                             DumpInstruction(instruction, (UINT_PTR)pTeb->WOW32Reserved);
                             return TRUE;
                         }

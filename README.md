@@ -23,6 +23,10 @@ Please refer to the Zeroperil blog post for more information [https://zeroperil.
 
 A jump instruction has been patched into the function to redirect execution flow
 
+### WOW
+
+Detection of the WOW64 syscall stub being hooked, which allows filtering of all system calls
+
 ### EAT 
 
 The address in the export address table does not match the address in the export address table in the copy on disc
@@ -34,3 +38,4 @@ GetProcAddress hook, an experimental feature, this is only output in verbose mod
 ## Verification
 
 The only way to truly verify the correct working of the program is to check in a debugger if hooks are present.  If you are getting a zero hooks result and are expecting to see something different, then first verify this in a debugger and please get in touch.
+
